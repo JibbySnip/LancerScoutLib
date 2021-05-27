@@ -1,8 +1,9 @@
 package com.finnbrenner.LancerScoutLib.EventStructures;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Alliance {
+public class Alliance implements Serializable {
     public enum AllianceColor {
         RED,
         BLUE;

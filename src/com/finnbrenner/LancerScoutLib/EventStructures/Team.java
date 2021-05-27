@@ -1,10 +1,11 @@
 package com.finnbrenner.LancerScoutLib.EventStructures;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Team {
+public class Team implements Serializable {
     private int teamNumber;
     private String teamName;
     private ArrayList<LancerEvent> seasonEvents = new ArrayList<>();
