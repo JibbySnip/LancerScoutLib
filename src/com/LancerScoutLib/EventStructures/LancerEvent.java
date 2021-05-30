@@ -1,12 +1,33 @@
-package com.finnbrenner.LancerScoutLib.EventStructures;
+/*
+ * Library to support the development of FRC and FTC Scouting Applications
+ *     Copyright (C) 2021  RoboLancers
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
-import com.finnbrenner.LancerScoutLib.MathTools.BPRCalculator;
+package com.LancerScoutLib.EventStructures;
+
+import com.LancerScoutLib.Utils.BPRCalculator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class LancerEvent implements Serializable {
+/**
+ * An extendable class for a per-season event. This is hopefully a decent model to build off of.
+ */
+public abstract class LancerEvent implements Serializable {
     private final int teamsPerAlliance;
     private final ArrayList<Team> teams = new ArrayList<>();
     private final ArrayList<Match> matches = new ArrayList<>();
@@ -53,6 +74,9 @@ public class LancerEvent implements Serializable {
         }
     }
 
+    /**
+     * This updates a bunch of really useful statistics that I like a lot. You can read more about them online, and if you can't just email me (check the README file for my email)
+     */
     private void updateBaseScoreStatistics() {
         updateOPR();
         updateDPR();
@@ -70,10 +94,11 @@ public class LancerEvent implements Serializable {
         }
     }
 
-    public void addMatch(int matchNumber, Alliance allianceRed, Alliance allianceBlue) {
-        matches.add(new Match(matchNumber, allianceRed, allianceBlue, this));
-    }
-
+    /**
+     * Just a utility function. You should add some of your own as well.
+     * @param matchNumber
+     * @return
+     */
     public Match getMatch(int matchNumber) {
         return matches.get(matchNumber);
     }

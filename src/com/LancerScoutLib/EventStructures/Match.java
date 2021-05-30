@@ -1,16 +1,41 @@
-package com.finnbrenner.LancerScoutLib.EventStructures;
+/*
+ * Library to support the development of FRC and FTC Scouting Applications
+ *     Copyright (C) 2021  RoboLancers
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.LancerScoutLib.EventStructures;
+
+import com.LancerScoutLib.Utils.FrcAPIHandler;
 
 import java.io.Serializable;
 
-public class Match implements Serializable {
+/**
+ * Model for a match. I would recommend adding a HashMap with per-season match attributes that can be synchronized using FRC
+ * API {@link FrcAPIHandler}. Someone more motivated might want to migrate a lot of these
+ * models to a SQL database for better backwards-referencability (I know there's an actual word for this but I can't remember it) and general organization.
+ */
+public abstract class Match implements Serializable {
     public enum MatchRanking {
         SEED,
         SEMIFINALS,
         FINALS
     }
     public int matchNumber;
-    private Alliance[] alliances; // goes Red, Blue
-    private int[] scores = new int[2];
+    private final Alliance[] alliances; // goes Red, Blue
+    private final int[] scores = new int[2];
     private Alliance winner;
     private final LancerEvent event;
 
@@ -18,6 +43,11 @@ public class Match implements Serializable {
         alliances = new Alliance[]{allianceRed, allianceBlue};
         this.matchNumber = matchNumber;
         this.event = event;
+        for (Alliance a : alliances) {
+            for (Team t : a.getTeams()) {
+                t.addMatch(this);
+            }
+        }
     }
 
     /**
@@ -55,10 +85,7 @@ public class Match implements Serializable {
 
     public boolean containsTeam(Team t, Alliance.AllianceColor allianceColor) {
         Alliance a = alliances[(allianceColor == Alliance.AllianceColor.RED) ? 0 : 1];
-        if (a.getTeams().contains(t)) {
-                return true;
-        }
-        return false;
+        return a.getTeams().contains(t);
     }
 
     public int getRedScore() {
